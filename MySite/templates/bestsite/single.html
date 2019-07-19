@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <title>Single Post</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="{% static '/Post/css/bootstrap.min.css' %}">
+
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="{% static '/Post/css/font-awesome/css/font-awesome.min.css' %}">
+
+    <!-- Google Webfonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css'>
+
+    <!-- Styles -->
+   <link rel="stylesheet" href="{% static '/Post/css/style.css'%}" id="theme-styles">
+
+    <!--[if lt IE 9]>      
+        <script src="{% static '/Post/js/vendor/google/html5-3.6-respond-1.1.0.min.js'%}"></script>
+    <![endif]-->
+
+    
+</head>
+<body>
+    <header>
+        <div class="widewrapper masthead">
+            <div class="container">
+                <a href="#" id="logo">
+                    <img src="{% static '/Post/img/logo.png'%}" alt="clean Blog">
+                </a>
+
+                <div id="mobile-nav-toggle" class="pull-right">
+                    <a href="#" data-toggle="collapse" data-target=".clean-nav .navbar-collapse">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                </div>
+
+                <nav class="pull-right clean-nav">
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav nav-pills navbar-nav">
+                          
+                             <li>
+                                <a href="{% url 'bestsite:index' %}">Home</a>
+                            </li>
+                            <li>
+                                <a href="#">About</a>
+                            </li>
+                            <li>
+                                <a href="#">Contact</a>
+                            </li>                       
+                        </ul>
+                    </div>
+                </nav>        
+
+            </div>
+        </div>
+
+        <div class="widewrapper subheader">
+            <div class="container">
+                <div class="clean-breadcrumb">
+                    <a href="#">{{restr.name}}</a>
+                </div>
+
+                <div class="clean-searchbox">
+                    <form action="#" method="get" accept-charset="utf-8">
+                       
+                        <input class="searchfield" id="searchbox" type="text" placeholder="Search">
+                         <button class="searchbutton" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="widewrapper main">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 blog-main">
+                    <article class="blog-post">
+                        <header>
+                            <div class="lead-image">
+                                <img src="/static/Post/img/1.jpg" alt="" class="img-responsive">
+                                
+                            </div>
+                        </header>
+                        <div class="body">
+                            <h1>{{restr.name}}</h1>
+                            <div class="meta">
+                                <i class="fa fa-calendar"></i>{{restr.address}}<br/>
+                                <i class="fa fa-user"></i> Rate:({{restr.average_rate}})<i class="fa fa-comments"></i><span class="data"><a href="#comments">{{restr.comment_num}} Comments</a></span>
+                            </div>
+                            <p>{{restr.description}}</p>
+
+                        </div>
+                    </article>
+
+                    <aside class="social-icons clearfix">
+                        <h3>Share on </h3> 
+                        <a href="#"><i class="fa fa-facebook"></i></a> <a href="#"><i class="fa fa-twitter"></i></a> <a href="#"><i class="fa fa-google"></i></a>
+                    </aside>
+
+                    <aside class="comments" id="comments">
+                        <hr>
+                        <h2><i class="fa fa-comments"></i> {{restr.comment_num}} Comments</h2>
+                        {% for c in comments %}
+                        {% if c.cid %}
+                        <article class="comment">
+                            <header class="clearfix">
+                                <img src="{% static '/Post/img/avatar.png'%}" alt="A Smart Guy" class="avatar">
+                                <div class="meta">
+                                    <h3><a href="#">User{{c.user_id}}</a></h3>
+                                    <span class="date">
+                                        Rate:{{c.rate}}&nbsp&nbsp&nbsp&nbspPrice:{{c.price}}&nbsp&nbsp&nbsp&nbsp
+                                        Dine-In People:{{c.man_num}}&nbsp&nbsp&nbsp&nbspService Fee:{{c.service_fee}}&nbsp&nbsp&nbsp&nbspLikes:{{c.like_num}}
+                                    </span>
+                                    
+                                    <span class="separator">
+                                        -
+                                    </span>
+                                    {% ifnotequal c.user_id 1 %}
+                                    <!-- <form action="{% url 'bestsite:submit_like' pk=c.cid%}"  method="post" accept-charset="utf-8">
+                                            {% csrf_token %}
+                                        <button type="submit" >Agree</button>
+                                    </form>
+                                                                            -->
+                                    <button type = "button">Agree</button>
+                                    {% endifnotequal %}                                                                                                                                                                               
+                                </div>
+                            </header>
+                             <div class="body">
+                               {{c.content}}
+                            </div>
+                            <button type="button" style="float:right">Reply</button>
+                        </br>
+                            <div class="body" style = "text-align:right; display:none" id = {{c.id}}>
+                                <input type="text" name="reply"  placeholder="reply" class="form-control input-lg">
+                                <button type="button" >Cancel</button><button type="button" >Submit</button>
+                         </div>
+                        </article>
+                        {% else %}
+                        {% for r in c %}
+                        <article class="comment reply">
+                            <header class="clearfix">
+                                <img src="{% static '/Post/img/avatar.png'%}" alt="A Smart Guy" class="avatar">
+                                <div class="meta">
+                                    <h4><a href="#">User{{r.user_id}}</a></h4>
+                                    <span class="date">
+                                        @User{{r.reply_to_uid}}
+                                    </span>
+                                    <span class="separator">
+                                        - said:
+                                    </span>
+                                    
+                                </div>
+                            </header>
+                             <div class="body">
+                               {{r.content}}.
+                            </div>
+                            <button type="button" style="float:right">Reply</button>
+                        </br>
+                        <div class="body" style = "text-align:right; display:none">
+                                <input type="text" name="reply"  placeholder="reply" class="form-control input-lg">
+                                <button type="button" >Cancel</button><button type="button" >Submit</button>
+                         </div>
+                        </article>
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+
+                    </aside>
+
+                    <aside class="create-comment" id="create-comment">
+                        <hr>    
+
+                        <h2><i class="fa fa-pencil"></i> Add Comment</h2>
+
+                        <form action="{% url 'bestsite:submit_comment' pk=restr.rid%}"  method="post" accept-charset="utf-8">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" name="price" id="comment-price" placeholder="Price" class="form-control input-lg">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" name="man_num" id="comment-num" placeholder="Dine-In People" class="form-control input-lg">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" name="service_fee" id="comment-sfee" placeholder="Service Fee" class="form-control input-lg">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" name="rate" id="comment-rate" placeholder="Rate" class="form-control input-lg">
+                                </div>
+                            </div>
+
+                            <textarea rows="10" name="content" id="comment-body" placeholder="Your Message" class="form-control input-lg"></textarea>
+
+                            <div class="buttons clearfix">
+                                <button type="submit" class="btn btn-xlarge btn-clean-one">Submit</button>
+                            </div>
+                        </form>
+                    </aside>
+                </div>
+                <aside class="col-md-4 blog-aside">
+                    <div class="aside-widget">
+                        <header>
+                            <h3>Canteen Category</h3>
+                        </header>
+                        <div class="body">
+                            <ul class="clean-list">
+                                <li><a href="">Chinese Food</a></li>
+                                <li><a href="">Japanese Food</a></li>
+                                <li><a href="">Western Food</a></li>
+                                <li><a href="">Local Dish</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="widewrapper footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 footer-widget">
+                       <h3> <i class="fa fa-user"></i>About</h3>
+                       <p>Poor design.</p>
+                    </div>
+
+                    <div class="col-md-4 footer-widget">
+                        <h3> <i class="fa fa-pencil"></i> Recent Post</h3>
+                        <ul class="clean-list">                   
+                        </ul>
+                    </div>
+
+                    <div class="col-md-4 footer-widget">
+                        <h3> <i class="fa fa-envelope"></i>Contact Me</h3>
+
+                        <p>No.</p>
+                    
+                         <div class="footer-widget-icon">
+                            <i class="fa fa-facebook"></i><i class="fa fa-twitter"></i><i class="fa fa-google"></i>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+
+    </footer>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{%static '/Post/js/bootstrap.min.js'%}"></script>
+    <script src="{%static '/Post/js/modernizr.js'%}"></script>
+    <script type="text/javascript">
+    function displayReply(contentId,buttonId){  
+        var e1=document.getElementById(contentId);  
+        var e2=document.getElementById(buttonId); 
+        e1.style.display = "inline";
+        e2.style.display = "none";
+         
+    } 
+    </script>
+
+</body>
+</html>
